@@ -1,4 +1,4 @@
-import { lazy, useEffect } from 'react';
+import { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 const HomePage = lazy(() => import('./pages/HomePage/HomePage'));
@@ -11,6 +11,7 @@ import RestrictedRoute from './RestrictedRoute';
 import SharedLayout from './components/SharedLayout/SharedLayout.jsx';
 
 import './App.css';
+import ChartComponent from './components/ChartComponent/ChartComponent.jsx';
 
 function App() {
   return (
@@ -26,7 +27,9 @@ function App() {
                   <TrackerPage />
                 </PrivateRoute>
               }
-            />
+            >
+              <Route path="statistics" element={<ChartComponent />} />
+            </Route>
           }
           {
             <Route
