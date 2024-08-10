@@ -53,7 +53,9 @@ button.button:focus {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  align-items: start;
 }
+
 .iconsWrapper {
   display: flex;
   flex-direction: column;
@@ -107,7 +109,7 @@ button.button:focus {
 }
 
 @media screen and (min-width: 768px) {
-    .item {
+  .item {
     min-width: calc((100% - (2 * 16px)) / 3);
   }
 }
