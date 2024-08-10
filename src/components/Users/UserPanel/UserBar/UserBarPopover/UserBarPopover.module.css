@@ -1,4 +1,4 @@
-.popover_btn {
+button.popover_btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -17,14 +17,14 @@
   height: 16px;
   stroke: rgba(50, 63, 71, 0.4);
   fill: transparent;
-}
-
-.popover_btn:hover .popover_icon {
-  stroke: var(--basic-dark-blue);
   transition: stroke var(--transition-delay) var(--transition);
 }
 
-.popover_btn:hover {
+button.popover_btn:hover .popover_icon {
+  stroke: var(--basic-dark-blue);
+}
+
+button.popover_btn:hover {
   color: var(--basic-dark-blue);
   background-color: transparent;
 }

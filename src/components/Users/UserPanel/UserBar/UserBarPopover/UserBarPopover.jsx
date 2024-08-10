@@ -1,5 +1,3 @@
-import { CiSettings } from 'react-icons/ci';
-import { FiLogOut } from 'react-icons/fi';
 import css from './UserBarPopover.module.css';
 import { useDispatch } from 'react-redux';
 import {
