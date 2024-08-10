@@ -25,7 +25,7 @@ button.button:focus {
 .iconGlass {
   fill: var(--basic-green);
   width: 38px;
-  height: 38px;
+  height: 31px;
 }
 
 .editArea {
@@ -52,12 +52,12 @@ button.button:focus {
 .dataWrapper {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 .iconsWrapper {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
 .item {
@@ -68,8 +68,8 @@ button.button:focus {
   align-items: center;
   justify-content: space-between;
   padding: 18px 14px;
-  gap: 8px;
-  min-width: calc((303px - 8px) / 2);
+  /* gap: 8px; */
+  /* min-width: calc((303px - 8px) / 2); */
 }
 
 @media screen and (min-width: 375px) {
@@ -78,6 +78,36 @@ button.button:focus {
 @media screen and (min-width: 768px) {
   .item {
     padding: 20px;
+    gap: 20px;
     min-width: calc((100% - (2 * 32px)) / 3);
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .volume {
+    font-size: 15px;
+  }
+
+  .dataWrapper {
+    gap: 13px;
+  }
+
+  .iconsWrapper {
+    gap: 14px;
+  }
+
+  .iconGlass {
+    fill: var(--basic-green);
+    width: 32px;
+    height: 36px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+    .item {
+    min-width: calc((100% - (2 * 16px)) / 3);
   }
 }

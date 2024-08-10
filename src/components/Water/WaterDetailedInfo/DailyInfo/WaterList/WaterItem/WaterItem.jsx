@@ -14,21 +14,18 @@ const WaterItem = ({ item }) => {
   const dispatch = useDispatch();
   const { returnAmPmTime } = useChosenDate();
 
-  const checkVolume = () => {
-    if (item.volume < 1000) return `${item.volume} ml`;
-    if (item.volume >= 1000) return `${item.volume / 1000} L`;
-  };
-
   return (
     <li key={item._id} className={css.item}>
       <svg className={css.iconGlass}>
         <use href={'/sprite.svg#icon-glass'}></use>
       </svg>
       <Container addClass={css.dataWrapper}>
-        <p className={css.volume}>{checkVolume()}</p>
-        <p className={css.itemTime}>{returnAmPmTime}</p>
+        <p className={css.volume}>
+          {item.volume < 1000 ? `${item.volume} ml` : `${item.volume / 1000} L`}
+        </p>
         <p className={css.itemTime}>{returnAmPmTime(item.date)}</p>
       </Container>
+
       <Container addClass={css.iconsWrapper}>
         <Button
           addClass={css.button}
