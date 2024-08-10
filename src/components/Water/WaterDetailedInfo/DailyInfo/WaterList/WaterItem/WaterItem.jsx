@@ -7,25 +7,12 @@ import {
   changeWaterModalEdit,
 } from 'src/redux/water/slice';
 import { useDispatch } from 'react-redux';
-import sprite from '/sprite.svg';
-import { CiLogin } from 'react-icons/ci';
 import Container from 'src/components/REUSABLE/Container/Container.jsx';
+import useChosenDate from 'src/hooks/useChosenDate.js';
 
 const WaterItem = ({ item }) => {
   const dispatch = useDispatch();
-
-  const date = new Date(item.date);
-  const options = {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  };
-  const itemTime = date.toLocaleString('en-US', options);
-
-  const checkVolume = () => {
-    if (item.volume < 1000) return `${item.volume} ml`;
-    if (item.volume > 1000) return `${item.volume / 1000} L`;
-  };
+  const { returnAmPmTime } = useChosenDate();
 
   return (
     <li key={item._id} className={css.item}>
@@ -33,9 +20,12 @@ const WaterItem = ({ item }) => {
         <use href={'/sprite.svg#icon-glass'}></use>
       </svg>
       <Container addClass={css.dataWrapper}>
-        <p className={css.volume}>{checkVolume()}</p>
-        <p className={css.itemTime}>{itemTime}</p>
+        <p className={css.volume}>
+          {item.volume < 1000 ? `${item.volume} ml` : `${item.volume / 1000} L`}
+        </p>
+        <p className={css.itemTime}>{returnAmPmTime(item.date)}</p>
       </Container>
+
       <Container addClass={css.iconsWrapper}>
         <Button
           addClass={css.button}
@@ -49,6 +39,7 @@ const WaterItem = ({ item }) => {
             <use href={'/sprite.svg#icon-pen'}></use>
           </svg>
         </Button>
+
         <Button
           addClass={css.button}
           onClick={() => {

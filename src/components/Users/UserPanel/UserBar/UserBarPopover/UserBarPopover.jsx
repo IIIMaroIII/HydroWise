@@ -1,5 +1,3 @@
-import { CiSettings } from 'react-icons/ci';
-import { FiLogOut } from 'react-icons/fi';
 import css from './UserBarPopover.module.css';
 import { useDispatch } from 'react-redux';
 import {
@@ -12,9 +10,8 @@ import Button from 'src/components/REUSABLE/Button/Button.jsx';
 const UserBarPopover = ({ onClose }) => {
   const dispatch = useDispatch();
 
-
   return (
-    <ul className={css.popover_list} >
+    <ul className={css.popover_list}>
       <li>
         <Button
           addClass={css.popover_btn}
@@ -25,7 +22,10 @@ const UserBarPopover = ({ onClose }) => {
             onClose();
           }}
         >
-          <CiSettings /> Settings
+          <svg className={css.popover_icon}>
+            <use href={'/public/sprite.svg#icon-settings'}></use>
+          </svg>
+          Setting
         </Button>
       </li>
       <li>
@@ -38,7 +38,11 @@ const UserBarPopover = ({ onClose }) => {
             onClose();
           }}
         >
-          <FiLogOut /> Log out
+          <svg className={css.popover_icon}>
+            <use href={'/public/sprite.svg#icon-log-out'}></use>
+          </svg>
+          Log out
+          {/* <FiLogOut className={css.popover_icon} /> */}
         </Button>
       </li>
     </ul>

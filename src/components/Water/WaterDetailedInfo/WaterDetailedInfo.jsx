@@ -3,7 +3,6 @@ import css from './WaterDetailedInfo.module.css';
 import MonthInfo from './MonthInfo/MonthInfo.jsx';
 import DailyInfo from './DailyInfo/DailyInfo.jsx';
 import Container from 'src/components/REUSABLE/Container/Container.jsx';
-import CustomInput from 'src/components/REUSABLE/Input/CustomInput.jsx';
 
 const WaterDetailedInfo = () => {
   return (
