@@ -1,5 +1,5 @@
 import css from './signInForm.module.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
@@ -11,9 +11,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { signIn } from 'src/redux/users/operations.js';
 import Button from 'src/components/REUSABLE/Button/Button';
 import Logo from 'src/components/REUSABLE/Logo/Logo';
-import AdvantagesSection from 'src/components/AdvantagesSection/AdvantagesSection';
 import CustomNavLink from 'src/components/REUSABLE/CustomNavLink/CustomNavLink';
-import { useWindowSize } from 'react-use';
 import CustomInput from 'src/components/REUSABLE/Input/CustomInput.jsx';
 import clsx from 'clsx';
 import Container from 'src/components/REUSABLE/Container/Container.jsx';
