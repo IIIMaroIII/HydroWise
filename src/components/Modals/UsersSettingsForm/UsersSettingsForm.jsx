@@ -8,14 +8,40 @@ import { useDispatch } from 'react-redux';
 import userSettingsFormValidation from 'src/Validation/Forms/userSettingsForm';
 import { BsExclamationLg } from 'react-icons/bs';
 import { FiLogOut } from 'react-icons/fi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { update } from 'src/redux/users/operations.js';
 import { changeModal } from 'src/redux/water/slice.js';
 import toast from 'react-hot-toast';
+import CustomInput from 'src/components/REUSABLE/Input/CustomInput.jsx';
+import clsx from 'clsx';
+import Container from 'src/components/REUSABLE/Container/Container.jsx';
 
 const UsersSettingsForm = () => {
   const dispatch = useDispatch();
   const [photoPreview, setPhotoPreview] = useState(null);
+
+  const [gender, setGender] = useState('woman');
+  const [weight, setWeight] = useState(0);
+  const [activeTime, setActiveTime] = useState(0);
+  const [dailyNorma, setDailyNorma] = useState(1.9);
+
+  const handleGenderChange = e => {
+    setGender(e.target.value);
+  };
+
+  const handleWeightChange = e => {
+    setWeight(e.target.value);
+  };
+
+  const handleActiveTimeChange = e => {
+    setActiveTime(e.target.value);
+  };
+
+  useEffect(() => {
+    console.log('gender', gender);
+    console.log('weight', weight);
+    console.log('activeTime', activeTime);
+  }, [activeTime, gender, weight]);
 
   const user = useSelector(selectUser);
   const {
@@ -29,11 +55,12 @@ const UsersSettingsForm = () => {
     defaultValues: {
       gender: 'woman',
       weight: 0,
+      activeTime: 0,
       email: user.email,
     },
   });
 
-  let waterAmount = watch('waterIntake', '');
+  // let waterAmount = watch('waterIntake', '');
 
   const onSubmit = async data => {
     const formData = new FormData();
@@ -43,9 +70,9 @@ const UsersSettingsForm = () => {
     formData.append('email', data.email);
     formData.append('weight', data.weight);
     formData.append('activeTime', data.activeTime);
-    if (data.waterIntake) {
-      formData.append('waterIntake', data.waterIntake);
-    }
+    // if (data.waterIntake) {
+    //   formData.append('waterIntake', data.waterIntake);
+    // }
 
     dispatch(update(formData))
       .unwrap()
@@ -67,11 +94,6 @@ const UsersSettingsForm = () => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className={css.settingsForm}>
         <div className={css.photoUrlWrapper}>
-          {/* <img
-            className={css.photoUrl}
-            src={'src/assets/pictures/userImg.png'}
-            alt="photoUrl Preview"
-          /> */}
           {photoPreview ? (
             <img
               className={css.photoUrl}
@@ -86,21 +108,18 @@ const UsersSettingsForm = () => {
             />
           )}
           <div className={css.fileWrapper}>
-            {/* <input
-              className={css.file}
-              type="file"
-              name="file"
-              {...register('photoUrl')}
-            /> */}
             <div className={css.uploadPhotoBtnContainer}>
               <Button addClass={css.uploadPhoto}>
                 <FiLogOut className={css.logOutIcon} />
                 <p>Upload a photo</p>
-                <input
-                  className={css.file}
-                  type="file"
-                  name="file"
-                  {...register('photoUrl')}
+                <CustomInput
+                  inputClass={css.file}
+                  inputType="file"
+                  inputName="file"
+                  {...register('photoUrl', {
+                    onBlur: () => {},
+                    onFocus: () => {},
+                  })}
                   onChange={handleFileChange}
                 />
               </Button>
@@ -108,126 +127,132 @@ const UsersSettingsForm = () => {
           </div>
         </div>
         {errors.photoUrl && <p>{errors.photoUrl.message}</p>}
-        <div>
-          <p
-            className={`${css.apLabelName} ${css.boldLabel} ${css.genderTextTitle}`}
-          >
-            Your gender identity
-          </p>
-          <label className={css.genderTextLabel}>
-            <input
-              type="radio"
-              name="gender"
+        <Container addClass={css.genderIndentityWrapper}>
+          <p className={css.genderText}>Your gender identity</p>
+          <Container addClass={css.genderWrapper}>
+            <CustomInput
+              label
+              labelName="Woman"
+              labelClass={clsx(css.genderLabel, css.rowReverse)}
+              inputClass={css.genderInput}
+              inputType="radio"
+              inputName="gender"
               value="woman"
-              {...register('gender')}
+              checked={gender === 'woman'}
+              onChange={handleGenderChange}
             />
-            Woman
-          </label>
-          <label className={css.genderTextLabel}>
-            <input
-              type="radio"
-              name="gender"
+            <CustomInput
+              label
+              labelName="Man"
+              labelClass={clsx(css.genderLabel, css.rowReverse)}
+              inputClass={css.genderInput}
+              inputType="radio"
+              inputName="gender"
               value="man"
-              {...register('gender')}
+              checked={gender === 'man'}
+              onChange={handleGenderChange}
             />
-            Man
-          </label>
+          </Container>
           {errors.gender && <p>{errors.gender.message}</p>}
-        </div>
-        <div className={css.settingsFormContainer}>
-          <div className={css.firstFormContainer}>
-            <div>
-              <label className={`${css.apLabelName} ${css.boldLabel}`}>
-                Your name
-                <input
-                  className={css.apFrame}
-                  type="text"
-                  {...register('name')}
-                />
-              </label>
-              {errors.name && <p>{errors.name.message}</p>}
+        </Container>
+
+        <CustomInput
+          label
+          labelName="Your name"
+          labelClass={clsx(css.genderLabel)}
+          inputClass={css.genderInput}
+          inputType="text"
+          inputName="name"
+          {...register('name', {
+            onBlur: () => {},
+            onFocus: () => {},
+          })}
+        />
+        {errors.name && <p>{errors.name.message}</p>}
+
+        <CustomInput
+          label
+          labelName="Email"
+          labelClass={clsx(css.genderLabel)}
+          inputClass={css.genderInput}
+          inputType="email"
+          inputName="email"
+          {...register('email', {
+            onBlur: () => {},
+            onFocus: () => {},
+          })}
+        />
+        {errors.email && <p>{errors.email.message}</p>}
+
+        <div className={css.dailyNormaWrapper}>
+          <p className={css.dailyNormaTitle}>My daily norma</p>
+          <div className={css.dailyNormaByGender}>
+            <div className={css.dailyNormaByGenderWrapper}>
+              <p>For woman:</p>
+              <p className={css.accent}>V=(M*0,03) + (T*0,4)</p>
             </div>
-            <div>
-              <label className={`${css.apLabelName} ${css.boldLabel}`}>
-                Email
-                <input
-                  className={css.apFrame}
-                  type="email"
-                  {...register('email')}
-                />
-              </label>
-              {errors.email && <p>{errors.email.message}</p>}
-            </div>
-            <div className={css.dailyNormaWrapper}>
-              <p className={css.dailyNormaTitle}>My daily norma</p>
-              <div className={css.dailyNormaByGender}>
-                <div className={css.dailyNormaByGenderItem}>
-                  <p>For woman:</p>
-                  <p className={css.accent}>V=(M*0,03) + (T*0,4)</p>
-                </div>
-                <div className={css.dailyNormaByGenderItem}>
-                  <p>For man:</p>
-                  <p className={css.accent}>V=(M*0,04) + (T*0,6)</p>
-                </div>
-              </div>
-              <p className={`${css.apFrame} ${css.textInstruction}`}>
-                <span className={css.accent}>*</span> V is the volume of the
-                water norm in liters per day, M is your body weight, T is the
-                time of active sports, or another type of activity commensurate
-                in terms of loads (in the absence of these, you must set 0)
-              </p>
-              <div className={css.exclamatoryTextContainer}>
-                <BsExclamationLg className={css.exclamation} />
-                <p className={css.exclamatoryText}>Active time in hours</p>
-              </div>
+            <div className={css.dailyNormaByGenderWrapper}>
+              <p>For man:</p>
+              <p className={css.accent}>V=(M*0,04) + (T*0,6)</p>
             </div>
           </div>
-          <div className={css.secondFormContainer}>
-            <div>
-              <label className={css.apLabelName}>
-                Your weight in kilograms:
-                <input
-                  className={css.apFrame}
-                  type="number"
-                  {...register('weight')}
-                />
-              </label>
-              {errors.weight && <p>{errors.weight.message}</p>}
-            </div>
-            <div>
-              <label className={css.apLabelName}>
-                The time of active participation in sports:
-                <input
-                  className={css.apFrame}
-                  type="number"
-                  {...register('activeTime')}
-                />
-              </label>
-              {errors.activeTime && <p>{errors.activeTime.message}</p>}
-            </div>
-            <div>
-              <p className={`${css.apText} ${css.reqWaterText}`}>
-                The required amount of water in liters per day:{' '}
-                <span className={css.accent}>
-                  {waterAmount ? waterAmount : 1.8}L
-                </span>
-              </p>
-              {errors.waterIntake && <p>{errors.waterIntake.message}</p>}
-            </div>
-            <div>
-              <label className={`${css.apLabelName} ${css.boldLabel}`}>
-                Write down how much water you will drink:
-                <input
-                  className={css.apFrame}
-                  step="0.1"
-                  type="number"
-                  {...register('waterIntake')}
-                />
-              </label>
-              {errors.waterIntake && <p>{errors.waterIntake.message}</p>}
-            </div>
+          <p className={`${css.apFrame} ${css.textInstruction}`}>
+            <span className={css.accent}>*</span> V is the volume of the water
+            norm in liters per day, M is your body weight, T is the time of
+            active sports, or another type of activity commensurate in terms of
+            loads (in the absence of these, you must set 0)
+          </p>
+          <div className={css.exclamatoryTextContainer}>
+            <BsExclamationLg className={css.exclamation} />
+            <p className={css.exclamatoryText}>Active time in hours</p>
           </div>
         </div>
+
+        <CustomInput
+          label
+          labelName="Your weight in kilograms:"
+          labelClass={clsx(css.genderLabel)}
+          inputClass={css.genderInput}
+          inputType="number"
+          inputName="weight"
+          {...register('weight', {
+            onBlur: () => {},
+            onFocus: () => {},
+          })}
+        />
+        {errors.weight && <p>{errors.weight.message}</p>}
+
+        <CustomInput
+          label
+          labelName="The time of active participation in sports:"
+          labelClass={clsx(css.genderLabel)}
+          inputClass={css.genderInput}
+          inputType="number"
+          inputName="activeTime"
+          {...register('activeTime', {
+            onBlur: () => {},
+            onFocus: () => {},
+          })}
+        />
+        {errors.activeTime && <p>{errors.activeTime.message}</p>}
+
+        <p className={`${css.apText} ${css.reqWaterText}`}>
+          The required amount of water in liters per day:
+          <span className={css.accent}>{1.8}L</span>
+        </p>
+        {errors.waterIntake && <p>{errors.waterIntake.message}</p>}
+
+        {/* <label className={`${css.apLabelName} ${css.boldLabel}`}>
+          Write down how much water you will drink:
+          <input
+            className={css.apFrame}
+            step="0.1"
+            type="number"
+            {...register('waterIntake')}
+          />
+        </label> */}
+        {errors.waterIntake && <p>{errors.waterIntake.message}</p>}
+
         <Button addClass={css.saveButton} type="submit">
           Save
         </Button>
