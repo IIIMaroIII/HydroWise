@@ -7,7 +7,6 @@ import { FaAngleDown, FaAngleUp } from 'react-icons/fa6';
 import Button from 'src/components/REUSABLE/Button/Button.jsx';
 import { useClickAway } from 'react-use';
 import { useRef } from 'react';
-import Container from 'src/components/REUSABLE/Container/Container.jsx';
 
 const UserBar = () => {
   const user = useSelector(selectUser);

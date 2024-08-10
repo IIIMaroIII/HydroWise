@@ -70,8 +70,8 @@ button.button:focus {
   align-items: center;
   justify-content: space-between;
   padding: 18px 14px;
-  /* gap: 8px; */
-  /* min-width: calc((303px - 8px) / 2); */
+  gap: 8px;
+  min-width: calc((303px - 8px) / 2);
 }
 
 @media screen and (min-width: 375px) {
