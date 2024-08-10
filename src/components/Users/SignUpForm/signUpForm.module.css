@@ -9,7 +9,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
+  align-items: center;
+  height: 88vh;
 }
 
 .title {
@@ -81,18 +82,32 @@ button.button {
   color: var(--dark);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1439px) {
   .form {
     width: 436px;
     margin-left: auto;
     margin-right: auto;
   }
+  .formWrapper {
+    height: 85vh;
+  }
+
+  .signInFormContainer {
+  }
 }
 
 @media (min-width: 1440px) {
+  .form {
+    width: 100%;
+  }
+
   .signInFormContainer {
     flex-basis: calc((100% - 32px) / 2);
   }
-  .form {
+  .formWrapper {
+    margin: 0 auto;
+
+    width: 436px;
+    height: 100%;
   }
 }
