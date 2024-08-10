@@ -23,7 +23,7 @@ const UserBarPopover = ({ onClose }) => {
           }}
         >
           <svg className={css.popover_icon}>
-            <use href={'/public/sprite.svg#icon-settings'}></use>
+            <use href={'/sprite.svg#icon-settings'}></use>
           </svg>
           Setting
         </Button>
@@ -39,10 +39,9 @@ const UserBarPopover = ({ onClose }) => {
           }}
         >
           <svg className={css.popover_icon}>
-            <use href={'/public/sprite.svg#icon-log-out'}></use>
+            <use href={'/sprite.svg#icon-log-out'}></use>
           </svg>
           Log out
-          {/* <FiLogOut className={css.popover_icon} /> */}
         </Button>
       </li>
     </ul>
