@@ -91,7 +91,7 @@ export const fetchDailyWater = createAsyncThunk(
         toast.success(data.message);
       }
 
-      console.log('data', data);
+      // console.log('data', data);
       return data;
     } catch (error) {
       return rejectWithValue(

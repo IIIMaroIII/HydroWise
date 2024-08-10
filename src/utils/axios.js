@@ -28,19 +28,19 @@ AxiosWithCredentials.interceptors.request.use(
 AxiosWithCredentials.interceptors.response.use(
   res => res,
   async err => {
-    console.log('err in interceptors', err);
-    console.log('err.response in interceptors', err.response);
-    console.log(
-      'err.response.data.message in interceptors',
-      err.response.data.message,
-    );
+    // console.log('err in interceptors', err);
+    // console.log('err.response in interceptors', err.response);
+    // console.log(
+    //   'err.response.data.message in interceptors',
+    //   err.response.data.message,
+    // );
 
     const status = err?.response?.data.status || err?.response?.status || null;
     const statusText =
       err?.response?.data.message || err?.response?.statusText || null;
 
     const originalRequest = err.config;
-    console.log('originalRequest', originalRequest);
+    // console.log('originalRequest', originalRequest);
 
     if (status === 401 && statusText === 'Email or password invalid!') {
       toast.error(statusText);
@@ -60,21 +60,20 @@ AxiosWithCredentials.interceptors.response.use(
 
       setTimeout(() => {
         window.location.replace('/');
-        console.log('mission cookies with _retry');
+        // console.log('mission cookies with _retry');
       }, 4000);
     } else if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      console.log('Status 401 detected, attempting to refresh token...');
+      // console.log('Status 401 detected, attempting to refresh token...');
       try {
         const result = await store.dispatch(refresh()).unwrap();
-        console.log('result in interceptors response', result);
+        // console.log('result in interceptors response', result);
 
         originalRequest.headers.Authorization = `Bearer ${result}`;
 
         return AxiosWithCredentials(originalRequest);
       } catch (refreshError) {
-        console.log('Refresh failed:', refreshError);
-
+        // console.log('Refresh failed:', refreshError);
         // toast('Your session has expired. Please login again');
         // await store.dispatch(logout());
       }

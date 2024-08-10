@@ -10,7 +10,7 @@
   align-items: center;
   border-radius: 30px;
   padding: 6px 12px;
-  width: 137px;
+  width: 100%;
   height: 50px;
   background-color: var(--basic-dark-blue);
 
@@ -33,7 +33,7 @@
 .user_avatar {
   width: 38px;
   height: 38px;
-  border-radius: 100%;
+  border-radius: 50%;
   object-fit: cover;
 }
 
@@ -55,13 +55,9 @@
 @media screen and (min-width: 768px) {
   .user_bar_wrapper {
     gap: 10px;
-    width: 157px;
+    width: 100%;
     height: 56px;
   }
-  /* .user_avatar {
-            width: 44px;
-            height: 44px
-         } */
 
   .span {
     font-size: 16px;
@@ -72,7 +68,3 @@
     height: 44px;
   }
 }
-
-/* @media screen and (min-width:1440px) {
-     
-  } */

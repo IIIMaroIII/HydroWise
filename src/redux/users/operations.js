@@ -63,12 +63,11 @@ export const refresh = createAsyncThunk(
   'users/refresh',
   async (_, { rejectWithValue }) => {
     try {
-      console.log('Attempting to call refresh endpoint...');
+      // console.log('Attempting to call refresh endpoint...');
       const { data } = await AxiosWithCredentials.post(
         `${CONSTANTS.USERS_ENDPOINTS.refresh}`,
       );
-      console.log('data in refresh operations', data.data);
-      // AxiosWithCredentials.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
+      // console.log('data in refresh operations', data.data);
       return data.data.accessToken;
     } catch (error) {
       return rejectWithValue(
