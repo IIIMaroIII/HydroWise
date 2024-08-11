@@ -1,19 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Button from '../../../../../../REUSABLE/Button/Button';
 import css from './calendarItem.module.css';
 
 import useChosenDate from 'src/hooks/useChosenDate.js';
 import { fetchDailyWater } from 'src/redux/water/operations.js';
 import clsx from 'clsx';
-import { convertDailyTotalVolumeToPercentage } from 'src/redux/water/selectors.js';
 
-export const CalendarItem = ({ day, activeDay, setActiveDay }) => {
+export const CalendarItem = ({ day, activeDay, setActiveDay, percentage }) => {
   const dispatch = useDispatch();
   const { setChosenDay } = useChosenDate();
-  const percentage = useSelector(convertDailyTotalVolumeToPercentage).toFixed(
-    0,
-  );
-
 
   return (
     <>
