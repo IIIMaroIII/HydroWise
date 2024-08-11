@@ -1,52 +1,50 @@
 import * as yup from 'yup';
 import CONSTANTS from '../../components/Constants/constants.js';
 
-const { MAX_CHAR_VALIDATION, MIN_CHAR_VALIDATION, MAX_CHAR_WATER_VALIDATION } =
-  CONSTANTS.MODALS.SETTINGS_USER_MODAL;
+const { MAX_CHAR_WATER_VALIDATION } = CONSTANTS.MODALS.SETTINGS_USER_MODAL;
 
-const userSettingsFormValidation = yup.object().shape({
-  avatar: yup.string(),
+export const userSettingsFormValidation = yup.object().shape({
+  avatar: yup.string().typeError('Please provide a valid URL for your avatar'),
+
   gender: yup
     .string()
     .oneOf(['woman', 'man'], 'Gender must be either woman or man')
+    .typeError('Please select a valid gender')
+    .default('woman')
     .required('Gender is required'),
-  name: yup
-    .string()
-    .nullable(true)
-    .min(
-      MIN_CHAR_VALIDATION,
-      `Your name must be more than ${MIN_CHAR_VALIDATION} characters!`,
-    )
-    .max(
-      MAX_CHAR_VALIDATION,
-      `Your name must be less than ${MAX_CHAR_VALIDATION} characters!`,
-    ),
+
+  name: yup.string().typeError('Your name must be a valid string').optional(),
+
   email: yup
     .string()
-    .email('You must enter valid email address!')
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      'Please fill a valid email address in lowercase. Examples of valid email addresses: john.doe@example.com, john-doe@example.com, john@example.co.uk, john.doe@example.co.in',
-    ),
+    .typeError('Please provide a valid email address')
+    .email('Invalid email format')
+    .optional(),
+
   weight: yup
     .number()
-    .positive('Weight must be a positive number')
+    .typeError('Please enter a valid number for your weight')
+    .min(1, 'Weight must be at least 1')
+    .max(320, 'Weight cannot exceed 320 kilograms')
     .required('Your weight is required for counting water daily norma'),
+
   activeTime: yup
-    .number(0)
-    .nullable(true)
-    .notRequired()
-    .positive('Active time must be a positive number')
-    .typeError('Active time must be a number'),
-  waterIntake: yup
     .number()
-    .nullable(true)
-    .notRequired()
+    .typeError('Please enter a valid number for your active time')
+    .min(0, 'Active time cannot be negative')
+    .max(24, 'Active time cannot exceed 24 hours')
+    .default(0)
+    .required(
+      'Your active time in sports is required for counting water daily norma',
+    ),
+
+  dailyNorma: yup
+    .number()
+    .typeError('Please enter a valid number for your daily water intake')
     .positive('Water intake must be a positive number')
+    .required('Daily water intake is required')
     .max(
       MAX_CHAR_WATER_VALIDATION,
-      `Emount of water intake must not be greater than ${MAX_CHAR_WATER_VALIDATION} number!`,
-    )
-    .typeError('Water intake must be a number'),
+      `Amount of water intake must not be greater than ${MAX_CHAR_WATER_VALIDATION} liters!`,
+    ),
 });
-export default userSettingsFormValidation;

@@ -2,9 +2,9 @@ import { RotatingLines } from 'react-loader-spinner';
 
 import css from './loader.module.css';
 
-const Loader = () => {
+const Loader = ({ insideButton = false }) => {
   return (
-    <div className={css.wrapper}>
+    <div className={insideButton ? css.insideButton : css.wrapper}>
       <RotatingLines
         visible={true}
         height="48"
