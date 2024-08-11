@@ -102,7 +102,6 @@ button.button:focus {
   }
 
   .iconGlass {
-    fill: var(--basic-green);
     width: 32px;
     height: 36px;
   }

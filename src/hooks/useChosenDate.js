@@ -140,6 +140,7 @@ const useChosenDate = () => {
     returnAmPmTime,
     chosenYear: chosenDate ? new Date(chosenDate).getFullYear() : null,
     chosenMonth: chosenDate ? new Date(chosenDate).getMonth() : null,
+    chosenDay: chosenDate ? new Date(chosenDate).getDate() : null,
   };
 };
 
