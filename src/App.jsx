@@ -23,7 +23,7 @@ function App() {
             <Route
               path="/tracker"
               element={
-                <PrivateRoute redirectTo="/signup">
+                <PrivateRoute redirectTo="/signin">
                   <TrackerPage />
                 </PrivateRoute>
               }

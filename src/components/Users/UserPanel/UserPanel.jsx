@@ -11,7 +11,7 @@ const UserPanel = () => {
     <Container addClass={css.userPanelContainer}>
       <h2 className={css.title}>
         Hello
-        {user?.name !== null ? (
+        {user?.name ? (
           <span className={css.span}>, {user.name}!</span>
         ) : (
           <span className={css.span}>, User!</span>
