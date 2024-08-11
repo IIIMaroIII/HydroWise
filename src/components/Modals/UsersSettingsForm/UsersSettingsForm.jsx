@@ -1,11 +1,11 @@
 import css from './userSettingsForm.module.css';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Button from 'src/components/REUSABLE/Button/Button';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'src/redux/users/selectors.js';
 import { useDispatch } from 'react-redux';
-import userSettingsFormValidation from 'src/Validation/Forms/userSettingsForm';
+
 import { BsExclamationLg } from 'react-icons/bs';
 import { FiLogOut } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
@@ -13,66 +13,59 @@ import { update } from 'src/redux/users/operations.js';
 import { changeModal } from 'src/redux/water/slice.js';
 import toast from 'react-hot-toast';
 import CustomInput from 'src/components/REUSABLE/Input/CustomInput.jsx';
-import clsx from 'clsx';
 import Container from 'src/components/REUSABLE/Container/Container.jsx';
+import CONSTANTS, { IMAGES } from 'src/components/Constants/constants.js';
+import { userSettingsFormValidation } from 'src/Validation/Forms/userSettingsForm.js';
 
 const UsersSettingsForm = () => {
-  const dispatch = useDispatch();
-  const [photoPreview, setPhotoPreview] = useState(null);
-
-  const [gender, setGender] = useState('woman');
-  const [weight, setWeight] = useState(0);
-  const [activeTime, setActiveTime] = useState(0);
-  const [dailyNorma, setDailyNorma] = useState(1.9);
-
-  const handleGenderChange = e => {
-    setGender(e.target.value);
-  };
-
-  const handleWeightChange = e => {
-    setWeight(e.target.value);
-  };
-
-  const handleActiveTimeChange = e => {
-    setActiveTime(e.target.value);
-  };
-
-  useEffect(() => {
-    console.log('gender', gender);
-    console.log('weight', weight);
-    console.log('activeTime', activeTime);
-  }, [activeTime, gender, weight]);
-
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+  const [photoPreview, setPhotoPreview] = useState(() => {
+    return user?.photoUrl || CONSTANTS.USER.DEFAULT_USER_IMAGE;
+  });
+
+  const [manualDailyNorma, setManualDailyNorma] = useState(false);
+
   const {
-    register,
+    control,
     handleSubmit,
-    formState: { errors },
+    setValue,
     reset,
     watch,
+    formState: { errors, isDirty, isValid },
   } = useForm({
     resolver: yupResolver(userSettingsFormValidation),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
     defaultValues: {
       gender: 'woman',
       weight: 0,
       activeTime: 0,
-      email: user.email,
+      dailyNorma: 1.8,
+      email: user?.email || '',
+      name: user?.name || 'User',
     },
   });
 
-  // let waterAmount = watch('waterIntake', '');
+  const weight = watch('weight', 0);
+  const activeTime = watch('activeTime', 0);
+  const dailyNorma = watch('dailyNorma', 1.8);
 
   const onSubmit = async data => {
     const formData = new FormData();
-    formData.append('photoUrl', data.photoUrl[0]);
+
+    if (data.name && data.name !== '') {
+      formData.append('name', data.name);
+    }
+
+    if (data.photoUrl) {
+      formData.append('photoUrl', data.photoUrl[0]);
+    }
+
     formData.append('gender', data.gender);
-    formData.append('name', data.name);
-    formData.append('email', data.email);
     formData.append('weight', data.weight);
     formData.append('activeTime', data.activeTime);
-    // if (data.waterIntake) {
-    //   formData.append('waterIntake', data.waterIntake);
-    // }
+    formData.append('dailyNorma', data.dailyNorma);
 
     dispatch(update(formData))
       .unwrap()
@@ -89,6 +82,13 @@ const UsersSettingsForm = () => {
       setPhotoPreview(URL.createObjectURL(file));
     }
   };
+
+  useEffect(() => {
+    if (!manualDailyNorma) {
+      const norma = weight * 0.03 + activeTime * 0.4;
+      setValue('dailyNorma', norma.toFixed(2));
+    }
+  }, [activeTime, errors, manualDailyNorma, setValue, weight]);
 
   return (
     <div>
@@ -112,75 +112,91 @@ const UsersSettingsForm = () => {
               <Button addClass={css.uploadPhoto}>
                 <FiLogOut className={css.logOutIcon} />
                 <p>Upload a photo</p>
-                <CustomInput
-                  inputClass={css.file}
-                  inputType="file"
-                  inputName="file"
-                  {...register('photoUrl', {
-                    onBlur: () => {},
-                    onFocus: () => {},
-                  })}
-                  onChange={handleFileChange}
+
+                <Controller
+                  name="photoUrl"
+                  control={control}
+                  render={({ field }) => (
+                    <CustomInput
+                      inputClass={css.file}
+                      inputType="file"
+                      inputName="file"
+                      onChange={e => {
+                        handleFileChange(e);
+                        field.onChange(e.target.files);
+                      }}
+                    />
+                  )}
                 />
               </Button>
             </div>
           </div>
         </div>
+
         {errors.photoUrl && <p>{errors.photoUrl.message}</p>}
-        <Container addClass={css.genderIndentityWrapper}>
+
+        <div>
           <p className={css.genderText}>Your gender identity</p>
-          <Container addClass={css.genderWrapper}>
-            <CustomInput
-              label
-              labelName="Woman"
-              labelClass={clsx(css.genderLabel, css.rowReverse)}
-              inputClass={css.genderInput}
-              inputType="radio"
-              inputName="gender"
-              value="woman"
-              checked={gender === 'woman'}
-              onChange={handleGenderChange}
-            />
-            <CustomInput
-              label
-              labelName="Man"
-              labelClass={clsx(css.genderLabel, css.rowReverse)}
-              inputClass={css.genderInput}
-              inputType="radio"
-              inputName="gender"
-              value="man"
-              checked={gender === 'man'}
-              onChange={handleGenderChange}
-            />
-          </Container>
+          <Controller
+            name="gender"
+            control={control}
+            render={({ field }) => (
+              <>
+                <CustomInput
+                  label
+                  labelName="Woman"
+                  inputType="radio"
+                  inputClass={css.input}
+                  value="woman"
+                  checked={field.value === 'woman'}
+                  onChange={e => field.onChange(e.target.value)}
+                />
+                <CustomInput
+                  label
+                  labelName="Man"
+                  inputType="radio"
+                  inputClass={css.input}
+                  value="man"
+                  checked={field.value === 'man'}
+                  onChange={e => field.onChange(e.target.value)}
+                />
+              </>
+            )}
+          />
           {errors.gender && <p>{errors.gender.message}</p>}
-        </Container>
+        </div>
 
-        <CustomInput
-          label
-          labelName="Your name"
-          labelClass={clsx(css.genderLabel)}
-          inputClass={css.genderInput}
-          inputType="text"
-          inputName="name"
-          {...register('name', {
-            onBlur: () => {},
-            onFocus: () => {},
-          })}
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <CustomInput
+              label
+              labelName="Your name"
+              inputType="text"
+              inputClass={css.input}
+              error={errors.name ? true : false}
+              {...field}
+            />
+          )}
         />
-        {errors.name && <p>{errors.name.message}</p>}
+        {errors.name && (
+          <p className={css.errorMessage}>{errors.name.message}</p>
+        )}
 
-        <CustomInput
-          label
-          labelName="Email"
-          labelClass={clsx(css.genderLabel)}
-          inputClass={css.genderInput}
-          inputType="email"
-          inputName="email"
-          {...register('email', {
-            onBlur: () => {},
-            onFocus: () => {},
-          })}
+        <Controller
+          name="email"
+          control={control}
+          render={({ field }) => (
+            <CustomInput
+              label
+              labelName="Email"
+              disabled={true}
+              inputType="email"
+              inputClass={css.input}
+              {...field}
+            />
+          )}
         />
         {errors.email && <p>{errors.email.message}</p>}
 
@@ -208,52 +224,74 @@ const UsersSettingsForm = () => {
           </div>
         </div>
 
-        <CustomInput
-          label
-          labelName="Your weight in kilograms:"
-          labelClass={clsx(css.genderLabel)}
-          inputClass={css.genderInput}
-          inputType="number"
-          inputName="weight"
-          {...register('weight', {
-            onBlur: () => {},
-            onFocus: () => {},
-          })}
+        <Controller
+          name="weight"
+          control={control}
+          render={({ field }) => (
+            <CustomInput
+              label
+              labelName="Your weight in kilograms:"
+              inputType="number"
+              error={errors.weight ? true : false}
+              inputClass={css.input}
+              {...field}
+            />
+          )}
         />
-        {errors.weight && <p>{errors.weight.message}</p>}
+        {errors.weight && (
+          <p className={css.errorMessage}>{errors.weight.message}</p>
+        )}
 
-        <CustomInput
-          label
-          labelName="The time of active participation in sports:"
-          labelClass={clsx(css.genderLabel)}
-          inputClass={css.genderInput}
-          inputType="number"
-          inputName="activeTime"
-          {...register('activeTime', {
-            onBlur: () => {},
-            onFocus: () => {},
-          })}
+        <Controller
+          name="activeTime"
+          control={control}
+          render={({ field }) => (
+            <CustomInput
+              label
+              labelName="The time of active participation in sports:"
+              inputType="number"
+              inputClass={css.input}
+              error={errors.activeTime ? true : false}
+              {...field}
+            />
+          )}
         />
-        {errors.activeTime && <p>{errors.activeTime.message}</p>}
+        {errors.activeTime && (
+          <p className={css.errorMessage}>{errors.activeTime.message}</p>
+        )}
 
         <p className={`${css.apText} ${css.reqWaterText}`}>
           The required amount of water in liters per day:
-          <span className={css.accent}>{1.8}L</span>
+          <span className={css.accent}>1.8L</span>
         </p>
-        {errors.waterIntake && <p>{errors.waterIntake.message}</p>}
 
-        {/* <label className={`${css.apLabelName} ${css.boldLabel}`}>
-          Write down how much water you will drink:
-          <input
-            className={css.apFrame}
-            step="0.1"
-            type="number"
-            {...register('waterIntake')}
-          />
-        </label> */}
-        {errors.waterIntake && <p>{errors.waterIntake.message}</p>}
+        <Controller
+          name="dailyNorma"
+          control={control}
+          render={({ field }) => (
+            <CustomInput
+              label
+              labelName="Write down how much water you will drink:"
+              inputType="number"
+              inputClass={css.input}
+              error={errors.dailyNorma ? true : false}
+              {...field}
+              onChange={e => {
+                setManualDailyNorma(true);
+                field.onChange(e.target.value);
+              }}
+            />
+          )}
+        />
+        {errors.dailyNorma && (
+          <p className={css.errorMessage}>{errors.dailyNorma.message}</p>
+        )}
 
-        <Button addClass={css.saveButton} type="submit">
+        <Button
+          disabled={!isDirty || !isValid}
+          addClass={css.saveButton}
+          type="submit"
+        >
           Save
         </Button>
       </form>

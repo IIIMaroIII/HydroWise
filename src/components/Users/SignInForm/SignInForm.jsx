@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { signIn } from 'src/redux/users/operations.js';
+import { signIn, userInfo } from 'src/redux/users/operations.js';
 import Button from 'src/components/REUSABLE/Button/Button';
 import Logo from 'src/components/REUSABLE/Logo/Logo';
 import CustomNavLink from 'src/components/REUSABLE/CustomNavLink/CustomNavLink';
@@ -42,6 +42,7 @@ const SignInForm = () => {
     dispatch(signIn(data))
       .unwrap()
       .then(res => {
+        dispatch(userInfo());
         toast.success(res.message);
         reset();
         navigate('/tracker');

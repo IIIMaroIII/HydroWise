@@ -80,6 +80,14 @@ const useChosenDate = () => {
     return { hours: null, minutes: null };
   };
 
+  const getChosenDay = () => {
+    if (chosenDate) {
+      const date = new Date(chosenDate);
+      return date.getDate();
+    }
+    return null;
+  };
+
   const setHoursAndMinutes = (hours, minutes) => {
     if (chosenDate) {
       const updatedDate = new Date(chosenDate);
@@ -120,6 +128,7 @@ const useChosenDate = () => {
   return {
     getHoursAndMinutes,
     setHoursAndMinutes,
+    getChosenDay,
     chosenDate,
     getDaysOfMonth,
     setNewChosenDate,

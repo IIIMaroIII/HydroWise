@@ -1,6 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { initialState } from './initialState';
-import { logout, refresh, signIn, signUp, update } from './operations.js';
+import {
+  logout,
+  refresh,
+  signIn,
+  signUp,
+  update,
+  userInfo,
+} from './operations.js';
 
 export const usersSlice = createSlice({
   name: 'users',
@@ -12,9 +19,7 @@ export const usersSlice = createSlice({
         state.error = null;
       })
       .addCase(signUp.fulfilled, (state, { payload }) => {
-        state.user = payload.data;
-        state.isLoggedIn = true;
-        state.isLoading = null;
+        state.isLoading = false;
       })
       .addCase(signUp.rejected, state => {
         state.isLoading = false;
@@ -49,11 +54,24 @@ export const usersSlice = createSlice({
         state.error = null;
       })
       .addCase(update.fulfilled, (state, { payload }) => {
-        state.user = payload.data;
+        state.user = { ...state.user, ...payload };
         state.isLoading = false;
       })
       .addCase(update.rejected, state => {
         state.isLoading = false;
+      })
+      .addCase(userInfo.pending, state => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(userInfo.fulfilled, (state, { payload }) => {
+        console.log('payload', payload);
+        state.user = { ...state.user, ...payload.user };
+        state.isLoading = false;
+      })
+      .addCase(userInfo.rejected, state => {
+        state.isLoading = false;
+        state.isLoggedIn = false;
       })
       .addCase(refresh.pending, state => {
         state.isRefreshing = true;

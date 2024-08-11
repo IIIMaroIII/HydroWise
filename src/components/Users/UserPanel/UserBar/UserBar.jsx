@@ -28,10 +28,10 @@ const UserBar = () => {
         onClick={togglePopover}
         addClass={css.user_bar_wrapper}
       >
-        {user?.name !== null ? (
+        {user?.name ? (
           <span className={css.span}>{user.name}</span>
         ) : (
-          <span className={css.span}>Rodion Matvieiev</span>
+          <span className={css.span}>User</span>
         )}
         <div>
           <img

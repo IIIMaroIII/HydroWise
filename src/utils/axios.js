@@ -28,12 +28,12 @@ AxiosWithCredentials.interceptors.request.use(
 AxiosWithCredentials.interceptors.response.use(
   res => res,
   async err => {
-    // console.log('err in interceptors', err);
-    // console.log('err.response in interceptors', err.response);
-    // console.log(
-    //   'err.response.data.message in interceptors',
-    //   err.response.data.message,
-    // );
+    console.log('err in interceptors', err);
+    console.log('err.response in interceptors', err.response);
+    console.log(
+      'err.response.data.message in interceptors',
+      err.response.data.message,
+    );
 
     const status = err?.response?.data.status || err?.response?.status || null;
     const statusText =
@@ -52,22 +52,22 @@ AxiosWithCredentials.interceptors.response.use(
     ) {
       localStorage.clear();
       toast(
-        'You have lost cookies somewhere or the session was not found and been redirected to Home Page. Try to log in again, please.',
+        'You have lost cookies somewhere or the session was not found and been redirected to Login Page. Try to log in again, please.',
         {
-          autoClose: 7000,
+          autoClose: 10000,
         },
       );
 
-      setTimeout(() => {
-        window.location.replace('/');
-        // console.log('mission cookies with _retry');
-      }, 4000);
+      // setTimeout(() => {
+      //   window.location.replace('/');
+      //   // console.log('mission cookies with _retry');
+      // }, 4000);
     } else if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      // console.log('Status 401 detected, attempting to refresh token...');
+      console.log('Status 401 detected, attempting to refresh token...');
       try {
         const result = await store.dispatch(refresh()).unwrap();
-        // console.log('result in interceptors response', result);
+        console.log('result in interceptors response', result);
 
         originalRequest.headers.Authorization = `Bearer ${result}`;
 

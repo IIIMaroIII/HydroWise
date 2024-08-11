@@ -10,6 +10,9 @@
 }
 
 /* Wrappers ============================== */
+.errorMessage {
+  color: var(--red-error);
+}
 
 .file {
   position: absolute;
