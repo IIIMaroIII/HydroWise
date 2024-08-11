@@ -9,9 +9,6 @@ import clsx from 'clsx';
 export const CalendarItem = ({ day, activeDay, setActiveDay, percentage }) => {
   const dispatch = useDispatch();
   const { getChosenDay, setChosenDay } = useChosenDate();
-  const percentage = useSelector(convertDailyTotalVolumeToPercentage).toFixed(
-    0,
-  );
 
   return (
     <>
