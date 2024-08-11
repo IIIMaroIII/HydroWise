@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { refresh } from 'src/redux/users/operations.js';
 
 const AxiosWithCredentials = axios.create({
-  baseURL: CONSTANTS.DOMAINS.SERVER_DEPLOY,
+  baseURL: CONSTANTS.DOMAINS.SERVER_LOCALHOST,
   withCredentials: true,
 });
 
@@ -28,12 +28,12 @@ AxiosWithCredentials.interceptors.request.use(
 AxiosWithCredentials.interceptors.response.use(
   res => res,
   async err => {
-    // console.log('err in interceptors', err);
-    // console.log('err.response in interceptors', err.response);
-    // console.log(
-    //   'err.response.data.message in interceptors',
-    //   err.response.data.message,
-    // );
+    console.log('err in interceptors', err);
+    console.log('err.response in interceptors', err.response);
+    console.log(
+      'err.response.data.message in interceptors',
+      err.response.data.message,
+    );
 
     const status = err?.response?.data.status || err?.response?.status || null;
     const statusText =

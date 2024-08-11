@@ -80,6 +80,14 @@ const useChosenDate = () => {
     return { hours: null, minutes: null };
   };
 
+  const getChosenDay = () => {
+    if (chosenDate) {
+      const date = new Date(chosenDate);
+      return date.getDate();
+    }
+    return null;
+  };
+
   const setHoursAndMinutes = (hours, minutes) => {
     if (chosenDate) {
       const updatedDate = new Date(chosenDate);
@@ -89,22 +97,22 @@ const useChosenDate = () => {
     }
   };
 
-    const checkIfToday = () => {
-      const parsedDate = new Date(parseISO(chosenDate));
-      const date = new Date();
+  const checkIfToday = () => {
+    const parsedDate = new Date(parseISO(chosenDate));
+    const date = new Date();
 
-      const formatedDate = date => {
-        const year = date.getFullYear();
-        const month = date.getMonth() + 1;
-        const day = date.getDate();
+    const formatedDate = date => {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
 
-        return `${year}/${month}/${day}`;
-      };
-      const chosenDay = CONSTANTS.DAYS[parsedDate.getDay()];
-      return formatedDate(parsedDate) === formatedDate(date)
-        ? 'Today'
-        : `${parsedDate.getDate()}, ${chosenDay}`;
+      return `${year}/${month}/${day}`;
     };
+    const chosenDay = CONSTANTS.DAYS[parsedDate.getDay()];
+    return formatedDate(parsedDate) === formatedDate(date)
+      ? 'Today'
+      : `${parsedDate.getDate()}, ${chosenDay}`;
+  };
 
   const returnAmPmTime = date => {
     const dateISO = new Date(date);
@@ -120,6 +128,7 @@ const useChosenDate = () => {
   return {
     getHoursAndMinutes,
     setHoursAndMinutes,
+    getChosenDay,
     chosenDate,
     getDaysOfMonth,
     setNewChosenDate,
