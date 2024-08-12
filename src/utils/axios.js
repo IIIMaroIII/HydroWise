@@ -78,7 +78,13 @@ AxiosWithCredentials.interceptors.response.use(
         // await store.dispatch(logout());
       }
     }
-    if (status === 500 || status === 400 || status === 403 || status === 409) {
+    if (
+      status === 500 ||
+      status === 404 ||
+      status === 400 ||
+      status === 403 ||
+      status === 409
+    ) {
       toast.error(statusText);
     }
 
