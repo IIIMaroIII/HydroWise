@@ -2,6 +2,19 @@
 @import 'normalize.css';
 
 :root {
+  --text-grey: #2f2f2f;
+  --basic-dark-blue: #323f47;
+  --basic-green: #9be1a0;
+  --green-hover: #87d28d;
+  --background-grey: #f0eff4;
+  --white: #ffffff;
+  --red-error: #ef5050;
+
+  --transition-delay: 500ms;
+  --default-delay: 250ms;
+  --disabled-grey: #bcbcbc;
+  --text-grey-white: #2f2f2f99;
+
   --shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
   --transition-delay: 250ms;
