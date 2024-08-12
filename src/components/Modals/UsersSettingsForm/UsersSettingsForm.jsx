@@ -13,7 +13,6 @@ import { update } from 'src/redux/users/operations.js';
 import { changeModal } from 'src/redux/water/slice.js';
 import toast from 'react-hot-toast';
 import CustomInput from 'src/components/REUSABLE/Input/CustomInput.jsx';
-import Container from 'src/components/REUSABLE/Container/Container.jsx';
 import CONSTANTS, { IMAGES } from 'src/components/Constants/constants.js';
 import { userSettingsFormValidation } from 'src/Validation/Forms/userSettingsForm.js';
 

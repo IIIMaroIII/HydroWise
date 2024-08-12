@@ -1,6 +1,6 @@
 import css from './signUpForm.module.css';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -8,11 +8,10 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Button from 'src/components/REUSABLE/Button/Button';
-
+import { signIn, signUp, userInfo } from 'src/redux/users/operations.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-import { signIn, signUp } from 'src/redux/users/operations.js';
 import toast from 'react-hot-toast';
 import Logo from 'src/components/REUSABLE/Logo/Logo';
 import Container from 'src/components/REUSABLE/Container/Container.jsx';
@@ -50,11 +49,15 @@ const SignUpForm = () => {
     dispatch(signUp({ email, password }))
       .unwrap()
       .then(() => {
-        dispatch(signIn({ email, password }));
-        toast.success(
-          `We are so exited to meet you ${email} in WaterWise App! 🎊`,
-        );
-        navigate('/tracker');
+        dispatch(signIn({ email, password }))
+          .unwrap()
+          .then(() => {
+            dispatch(userInfo());
+            toast.success(
+              `We are so exited to meet you ${email} in WaterWise App! 🎊`,
+            );
+            navigate('/tracker');
+          });
       });
   };
 
