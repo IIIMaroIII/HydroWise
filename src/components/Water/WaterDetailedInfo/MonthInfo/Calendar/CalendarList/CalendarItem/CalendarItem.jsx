@@ -1,14 +1,23 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../../../../../REUSABLE/Button/Button';
 import css from './calendarItem.module.css';
 
 import useChosenDate from 'src/hooks/useChosenDate.js';
-import { fetchDailyWater } from 'src/redux/water/operations.js';
+import {
+  fetchDailyWater,
+  fetchMonthlyWater,
+} from 'src/redux/water/operations.js';
 import clsx from 'clsx';
+import {
+  dailyNormaPercentage,
+  daysWithRecords,
+} from 'src/redux/water/selectors.js';
 
-export const CalendarItem = ({ day, activeDay, setActiveDay, percentage }) => {
+export const CalendarItem = ({ day, activeDay, setActiveDay }) => {
   const dispatch = useDispatch();
   const { getChosenDay, setChosenDay } = useChosenDate();
+  const dayWithRecord = useSelector(daysWithRecords);
+  const dailyPercentage = useSelector(dailyNormaPercentage(day));
 
   return (
     <>
@@ -17,16 +26,21 @@ export const CalendarItem = ({ day, activeDay, setActiveDay, percentage }) => {
           id={day}
           addClass={clsx(css.btn, {
             [css.active]: activeDay === day || getChosenDay() === day,
+            [css.done]: Number(dailyPercentage) === 100,
           })}
           onClick={() => {
             setActiveDay(day);
             setChosenDay(day);
-            dispatch(fetchDailyWater());
+            dispatch(fetchMonthlyWater())
+              .unwrap()
+              .then(() => dispatch(fetchDailyWater()));
           }}
         >
           {day}
         </Button>
-        <p className={css.text}>{`${percentage}%`}</p>
+        <p className={css.text}>
+          {dayWithRecord.includes(day) ? `${dailyPercentage}%` : '0%'}
+        </p>
       </li>
     </>
   );

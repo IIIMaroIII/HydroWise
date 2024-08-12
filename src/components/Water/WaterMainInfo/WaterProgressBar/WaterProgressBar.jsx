@@ -1,11 +1,9 @@
-import { useSelector } from 'react-redux';
 import css from './WaterProgressBar.module.css';
-import { convertDailyTotalVolumeToPercentage } from 'src/redux/water/selectors.js';
+import { useSelector } from 'react-redux';
+import { dailyNormaPercentage } from 'src/redux/water/selectors.js';
 
 const WaterProgressBar = () => {
-  const percentage = useSelector(convertDailyTotalVolumeToPercentage).toFixed(
-    0,
-  );
+  const percentage = useSelector(dailyNormaPercentage(new Date().getDate()));
 
   return (
     <div className={css.WaterProgressBar_container}>
